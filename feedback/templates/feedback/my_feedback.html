@@ -1,0 +1,31 @@
+{% extends "feedback/base.html" %}
+{% load static %}
+{% block title %}My feedback · Feedback Board{% endblock %}
+{% block content %}
+<div class="container page">
+  <h1 class="page-title">My feedback</h1>
+  <p class="page-lead">What you've sent from this browser. You can edit or delete it here.</p>
+
+  {% if items or filtered %}
+    {% include "feedback/_filters.html" %}
+  {% endif %}
+
+  <div class="entries" style="margin-top:1rem">
+    {% for f in items %}
+      {% include "feedback/_entry.html" with edit_url="my_edit" delete_url="my_delete" %}
+    {% empty %}
+      <div class="empty">
+        {% if filtered %}
+          <h2>No matching feedback found</h2>
+          <p>Try a different keyword or <a href="{% url 'my_feedback' %}">clear the filters</a>.</p>
+        {% else %}
+          <h2>Nothing here yet</h2>
+          <p>Feedback you send shows up here. <a href="{% url 'submit' %}">Give feedback</a></p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% include "feedback/_dialogs.html" %}
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/dashboard.js' %}?v=3"></script>{% endblock %}

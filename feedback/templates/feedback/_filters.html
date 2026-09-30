@@ -1,0 +1,26 @@
+<form id="filters" class="filters" method="get" role="search">
+  <div class="filters-search">
+    <label class="sr-only" for="q">Search feedback</label>
+    <input type="search" id="q" name="q" value="{{ q }}" placeholder="Search by name or message">
+    <button type="submit" class="btn btn-sm">Search</button>
+  </div>
+  <div class="filters-options">
+    <label class="sr-only" for="status">Status</label>
+    <select id="status" name="status">
+      <option value="">All statuses</option>
+      {% for value, label in statuses %}
+        <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+    <label class="sr-only" for="sort">Sort</label>
+    <select id="sort" name="sort">
+      <option value="new" {% if sort != "old" %}selected{% endif %}>Newest first</option>
+      <option value="old" {% if sort == "old" %}selected{% endif %}>Oldest first</option>
+    </select>
+    <label class="check-inline">
+      <input type="checkbox" name="image" value="1" {% if has_image %}checked{% endif %}>
+      Has image
+    </label>
+    {% if filtered %}<a class="clear" href="{{ request.path }}">Clear filters</a>{% endif %}
+  </div>
+</form>

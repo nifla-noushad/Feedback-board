@@ -1,0 +1,28 @@
+{% extends "feedback/base.html" %}
+{% load static %}
+{% block title %}Thank you · Feedback Board{% endblock %}
+{% block content %}
+<div class="container-narrow page">
+  <h1 class="page-title">Thanks, we've got it.</h1>
+  <p class="page-lead">Your feedback is with the team. You can still change or delete it below.</p>
+
+  <p class="next-links">
+    <a href="{% url 'submit' %}">Send more feedback</a>
+  </p>
+
+  {% if last %}
+  <div class="panel recap">
+    <p class="recap-label">You wrote</p>
+    <p class="recap-msg">{{ last.message|linebreaksbr }}</p>
+    {% if last.image %}<img class="recap-img" src="{{ last.image.url }}" alt="Your attached image">{% endif %}
+    <div class="entry-actions">
+      <a class="btn btn-ghost btn-sm" href="{% url 'my_edit' last.pk %}">Edit</a>
+      <button type="button" class="btn btn-ghost btn-sm btn-danger-text"
+              data-delete-url="{% url 'my_delete' last.pk %}" data-name="you">Delete</button>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% if last %}{% include "feedback/_dialogs.html" %}{% endif %}
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/dashboard.js' %}?v=3"></script>{% endblock %}

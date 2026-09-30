@@ -1,0 +1,45 @@
+<article class="entry entry-{{ f.status }}{% if f.image %} has-image{% endif %}">
+  {% if f.image %}
+    <button type="button" class="thumb" data-full="{{ f.image.url }}" aria-label="View image from {{ f.name }}">
+      <img src="{{ f.image.url }}" alt="" loading="lazy">
+    </button>
+  {% endif %}
+  <div class="entry-body">
+    <div class="entry-head">
+      <strong>{{ f.name }}</strong>
+      <span class="badge badge-{{ f.status }}">{{ f.get_status_display }}</span>
+      <time datetime="{{ f.created_at|date:'c' }}">{{ f.created_at|date:"j M Y, H:i" }}</time>
+    </div>
+    <p class="entry-msg">{{ f.message|linebreaksbr }}</p>
+    {% if show_status_actions %}
+    <div class="status-actions">
+      {% if f.status == "new" %}
+        <form method="post" action="{% url 'set_status' f.pk %}">{% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <input type="hidden" name="status" value="reviewed">
+          <button type="submit" class="link-btn">Mark reviewed</button>
+        </form>
+      {% endif %}
+      {% if f.status != "resolved" %}
+        <form method="post" action="{% url 'set_status' f.pk %}">{% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <input type="hidden" name="status" value="resolved">
+          <button type="submit" class="link-btn">Mark resolved</button>
+        </form>
+      {% endif %}
+      {% if f.status != "new" %}
+        <form method="post" action="{% url 'set_status' f.pk %}">{% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <input type="hidden" name="status" value="new">
+          <button type="submit" class="link-btn quiet">Reopen</button>
+        </form>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  <div class="entry-actions">
+    <a class="btn btn-ghost btn-sm" href="{% url edit_url f.pk %}">Edit</a>
+    <button type="button" class="btn btn-ghost btn-sm btn-danger-text"
+            data-delete-url="{% url delete_url f.pk %}" data-name="{{ f.name }}">Delete</button>
+  </div>
+</article>

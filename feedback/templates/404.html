@@ -1,0 +1,9 @@
+{% extends "feedback/base.html" %}
+{% block title %}Page not found · Feedback Board{% endblock %}
+{% block content %}
+<div class="container-narrow center-block">
+  <h1 class="page-title">Page not found</h1>
+  <p class="page-lead">That page doesn't exist or has been removed.</p>
+  <a class="btn btn-ghost" href="{% url 'home' %}">Go home</a>
+</div>
+{% endblock %}

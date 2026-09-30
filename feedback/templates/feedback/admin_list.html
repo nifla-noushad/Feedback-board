@@ -1,0 +1,60 @@
+{% extends "feedback/base.html" %}
+{% load static %}
+{% block title %}Dashboard · Feedback Board{% endblock %}
+{% block content %}
+<div class="container page">
+  <div class="page-head">
+    <div>
+      <h1 class="page-title">Feedback</h1>
+      <p class="page-lead">Review, update and remove what people have sent.</p>
+    </div>
+    <a class="btn btn-ghost btn-sm" href="{% url 'export_csv' %}{% if querystring %}?{{ querystring }}{% endif %}">Export CSV</a>
+  </div>
+
+  <nav class="stats" aria-label="Filter by status">
+    <a href="{% url 'dashboard' %}" {% if not status %}class="active" aria-current="true"{% endif %}><span>Total</span><strong>{{ stats.total }}</strong></a>
+    <a href="?status=new" {% if status == "new" %}class="active" aria-current="true"{% endif %}><span>New</span><strong>{{ stats.new }}</strong></a>
+    <a href="?status=reviewed" {% if status == "reviewed" %}class="active" aria-current="true"{% endif %}><span>Reviewed</span><strong>{{ stats.reviewed }}</strong></a>
+    <a href="?status=resolved" {% if status == "resolved" %}class="active" aria-current="true"{% endif %}><span>Resolved</span><strong>{{ stats.resolved }}</strong></a>
+  </nav>
+
+  {% include "feedback/_filters.html" %}
+
+  <p class="results-meta">
+    {{ page.paginator.count }} result{{ page.paginator.count|pluralize }}
+  </p>
+
+  {% if page.object_list %}
+  <div class="entries">
+    {% for f in page.object_list %}
+      {% include "feedback/_entry.html" with edit_url="edit" delete_url="delete" show_status_actions=True %}
+    {% endfor %}
+  </div>
+
+  {% if page.paginator.num_pages > 1 %}
+  <nav class="pagination" aria-label="Pagination">
+    {% if page.has_previous %}
+      <a class="btn btn-ghost btn-sm" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.previous_page_number }}">Previous</a>
+    {% else %}<span></span>{% endif %}
+    <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+    {% if page.has_next %}
+      <a class="btn btn-ghost btn-sm" href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ page.next_page_number }}">Next</a>
+    {% else %}<span></span>{% endif %}
+  </nav>
+  {% endif %}
+
+  {% else %}
+  <div class="empty">
+    {% if filtered %}
+      <h2>No feedback matches your filters</h2>
+      <p>Try a different search term or <a href="{% url 'dashboard' %}">clear the filters</a>.</p>
+    {% else %}
+      <h2>No feedback yet</h2>
+      <p>New submissions will show up here.</p>
+    {% endif %}
+  </div>
+  {% endif %}
+</div>
+{% include "feedback/_dialogs.html" %}
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/dashboard.js' %}?v=3"></script>{% endblock %}

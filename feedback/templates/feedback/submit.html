@@ -1,0 +1,62 @@
+{% extends "feedback/base.html" %}
+{% load static %}
+{% block title %}Give feedback · Feedback Board{% endblock %}
+{% block content %}
+<div class="container-narrow page">
+  <h1 class="page-title">Give feedback</h1>
+  <p class="page-lead">Tell us what happened or what you'd like to see.</p>
+
+  <div class="panel">
+    <div id="form-error" class="banner banner-error {% if not form.non_field_errors %}hidden{% endif %}" role="alert">{{ form.non_field_errors.0 }}</div>
+
+    <form id="fb-form" method="post" action="{% url 'submit' %}" enctype="multipart/form-data"
+          data-success-url="{% url 'thank_you' %}" novalidate>
+      {% csrf_token %}
+      <div class="sr-only" aria-hidden="true">
+        <label>Leave this field empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+      </div>
+
+      <div class="field">
+        <label for="id_name">Your name</label>
+        <input type="text" id="id_name" name="name" autocomplete="name"
+               value="{{ form.name.value|default:'' }}" aria-describedby="err-name"
+               {% if form.name.errors %}aria-invalid="true"{% endif %}>
+        <p class="error" id="err-name" data-for="name">{{ form.name.errors.0 }}</p>
+      </div>
+
+      <div class="field">
+        <label for="id_message">Feedback</label>
+        <textarea id="id_message" name="message" aria-describedby="err-message"
+                  {% if form.message.errors %}aria-invalid="true"{% endif %}>{{ form.message.value|default:'' }}</textarea>
+        <div class="field-row">
+          <p class="error" id="err-message" data-for="message">{{ form.message.errors.0 }}</p>
+          <span class="counter" id="msg-counter">0 characters</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="label">Image <span class="hint">(optional)</span></span>
+        <label class="dropzone" id="dropzone" for="id_image">
+          <strong>Choose an image or drop it here</strong>
+          <span>JPG, PNG or WEBP, up to 2 MB</span>
+        </label>
+        <input class="sr-only" type="file" id="id_image" name="image" accept="image/png,image/jpeg,image/webp" aria-describedby="err-image">
+        <p class="error" id="err-image" data-for="image">{{ form.image.errors.0 }}</p>
+        <div id="preview-wrap" class="hidden">
+          <div class="preview">
+            <img id="preview" alt="Preview of the selected image">
+            <button type="button" class="preview-remove" id="preview-remove" aria-label="Remove image">×</button>
+          </div>
+          <p class="preview-meta" id="preview-meta"></p>
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn btn-block">
+        <span class="spinner hidden" aria-hidden="true"></span>
+        <span class="label-text">Send feedback</span>
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}{% load static %}<script src="{% static 'js/feedback.js' %}?v=3"></script>{% endblock %}

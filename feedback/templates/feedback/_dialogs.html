@@ -1,0 +1,14 @@
+<dialog id="delete-dialog" aria-labelledby="del-title">
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="">
+    <h2 id="del-title">Delete this feedback?</h2>
+    <p>Feedback from <strong data-who></strong> and its image will be permanently removed.</p>
+    <div class="dialog-actions">
+      <button type="button" class="btn btn-ghost btn-sm" data-cancel>Cancel</button>
+      <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="lightbox" class="lightbox" aria-label="Image preview"><img alt="Feedback attachment"></dialog>

@@ -1,0 +1,28 @@
+{% extends "feedback/base.html" %}
+{% block content %}
+<div class="container">
+  <section class="hero hero-panel">
+    <h1>Tell us what's working and <span class="highlight">what isn't.</span></h1>
+    <p>Share a thought, report a problem or suggest an idea. A photo helps if you have one.</p>
+    <a class="btn btn-lg" href="{% url 'submit' %}">Give feedback</a>
+    {% if request.session.my_feedback %}
+      <p class="hero-aside">Already sent something? <a href="{% url 'my_feedback' %}">See your feedback</a>.</p>
+    {% endif %}
+  </section>
+
+  <section class="feature-notes">
+    <div class="feature-note">
+      <h2>Quick</h2>
+      <p>Two fields and about a minute.</p>
+    </div>
+    <div class="feature-note">
+      <h2>Visual</h2>
+      <p>Attach a photo when words aren't enough.</p>
+    </div>
+    <div class="feature-note">
+      <h2>Tracked</h2>
+      <p>Every note gets a status, from new to resolved.</p>
+    </div>
+  </section>
+</div>
+{% endblock %}

@@ -58,7 +58,8 @@ feedback-board/
 │   ├── migrations/
 │   └── templates/feedback/  HTML templates
 ├── static/css, static/js    Styles and scripts
-├── requirements.txt  .env.example  .gitignore
+├── requirements.txt  
+├─   .gitignore
 
 ```
 
@@ -93,6 +94,3 @@ Open http://127.0.0.1:8000/
 Try it: submit feedback with an image, log in at `/admin-login/`, and open the dashboard. The entry and its thumbnail appear there, and you can search, filter, edit and delete it.
 
 
-## Ideas for later
-
-Email notification to admins, star ratings or categories, a dark mode toggle, rate limiting with `django-ratelimit`, and an image lightbox with keyboard navigation.
